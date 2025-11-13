@@ -18,10 +18,10 @@ body {
 .container {
     width: 90%;
     max-width: 900px;
-    height: 80vh;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
+    padding-top: 10vh;
 }
 
 #story-container {
