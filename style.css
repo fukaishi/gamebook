@@ -33,6 +33,13 @@ body {
     align-items: flex-start;
     justify-content: flex-start;
     box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+#story-container:active {
+    background: rgba(0, 0, 0, 0.7);
 }
 
 #text-display {
@@ -106,6 +113,9 @@ body {
     cursor: pointer;
     transition: all 0.3s ease;
     text-align: left;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
 }
 
 .choice-button:hover {
@@ -116,6 +126,8 @@ body {
 }
 
 .choice-button:active {
+    background: rgba(80, 80, 120, 0.95);
+    border-color: #999;
     transform: translateX(10px) scale(0.98);
 }
 
@@ -130,6 +142,16 @@ body {
     color: #666;
     font-size: 16px;
     animation: fadeInOut 2s infinite;
+}
+
+.hint::after {
+    content: ' / タップで次へ';
+}
+
+@media (min-width: 769px) {
+    .hint::after {
+        content: '';
+    }
 }
 
 @keyframes fadeInOut {
@@ -151,14 +173,28 @@ body {
 
     #story-container {
         padding: 40px 25px;
+        height: 450px;
     }
 
     .choice-button {
-        font-size: 18px;
-        padding: 15px 20px;
+        font-size: 20px;
+        padding: 18px 25px;
+        min-height: 60px;
+    }
+
+    .choice-button:hover {
+        transform: none;
+    }
+
+    .choice-button:active {
+        transform: scale(0.98);
     }
 
     .text-large {
         font-size: 36px;
+    }
+
+    .hint {
+        font-size: 14px;
     }
 }
