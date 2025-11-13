@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ストーリー管理画面</title>
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+    <div class="admin-container">
+        <header class="admin-header">
+            <h1>ストーリー管理画面</h1>
+            <div class="header-actions">
+                <button id="load-json-btn" class="btn btn-primary">JSONを読み込む</button>
+                <button id="save-json-btn" class="btn btn-success">JSONを保存</button>
+                <a href="index.html" class="btn btn-secondary">プレビュー</a>
+            </div>
+        </header>
+
+        <div class="admin-content">
+            <!-- 左側：シーン一覧 -->
+            <aside class="scenes-list">
+                <div class="list-header">
+                    <h2>シーン一覧</h2>
+                    <button id="add-scene-btn" class="btn btn-small">＋ 新規シーン</button>
+                </div>
+                <div id="scenes-container" class="scenes-container">
+                    <!-- シーン一覧がここに表示される -->
+                </div>
+            </aside>
+
+            <!-- 右側：シーン編集 -->
+            <main class="scene-editor">
+                <div id="editor-placeholder" class="editor-placeholder">
+                    左側からシーンを選択してください
+                </div>
+
+                <div id="editor-content" class="editor-content hidden">
+                    <div class="editor-header">
+                        <h2>シーン編集</h2>
+                        <button id="delete-scene-btn" class="btn btn-danger">削除</button>
+                    </div>
+
+                    <!-- シーンID -->
+                    <div class="form-group">
+                        <label for="scene-id">シーンID</label>
+                        <input type="text" id="scene-id" class="form-control" placeholder="scene_id">
+                        <small>一意のIDを入力してください</small>
+                    </div>
+
+                    <!-- テキスト -->
+                    <div class="form-group">
+                        <label for="scene-text">テキスト</label>
+                        <textarea id="scene-text" class="form-control" rows="8" placeholder="表示するテキストを入力..."></textarea>
+                        <small>改行は自動的に \n に変換されます</small>
+                    </div>
+
+                    <!-- 次のシーン or 選択肢 -->
+                    <div class="form-group">
+                        <label>遷移タイプ</label>
+                        <div class="radio-group">
+                            <label>
+                                <input type="radio" name="transition-type" value="next" checked>
+                                次のシーン
+                            </label>
+                            <label>
+                                <input type="radio" name="transition-type" value="choices">
+                                選択肢
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- 次のシーン -->
+                    <div id="next-section" class="form-group">
+                        <label for="scene-next">次のシーンID</label>
+                        <input type="text" id="scene-next" class="form-control" placeholder="next_scene_id">
+                    </div>
+
+                    <!-- 選択肢 -->
+                    <div id="choices-section" class="form-group hidden">
+                        <label>選択肢</label>
+                        <div id="choices-list">
+                            <!-- 選択肢がここに表示される -->
+                        </div>
+                        <button id="add-choice-btn" class="btn btn-small">＋ 選択肢を追加</button>
+                    </div>
+
+                    <!-- エフェクト -->
+                    <div class="form-group">
+                        <label>文字エフェクト</label>
+                        <div id="effects-list">
+                            <!-- エフェクトがここに表示される -->
+                        </div>
+                        <button id="add-effect-btn" class="btn btn-small">＋ エフェクトを追加</button>
+                    </div>
+
+                    <div class="editor-footer">
+                        <button id="save-scene-btn" class="btn btn-primary">シーンを保存</button>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <input type="file" id="file-input" accept=".json" style="display: none;">
+
+    <script src="admin.js"></script>
+</body>
+</html>
