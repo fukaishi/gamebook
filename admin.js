@@ -62,14 +62,38 @@ class StoryEditor {
     }
 
     async loadStoryFromFile() {
+        // まずLocalStorageから読み込みを試みる
+        const savedData = localStorage.getItem('gamebook_story');
+        if (savedData) {
+            try {
+                this.storyData = JSON.parse(savedData);
+                this.renderSceneList();
+                console.log('LocalStorageからストーリーを読み込みました');
+                return;
+            } catch (error) {
+                console.error('LocalStorageの読み込みエラー:', error);
+            }
+        }
+
+        // LocalStorageにない場合はファイルから読み込み
         try {
             const response = await fetch('story.json');
             if (response.ok) {
                 this.storyData = await response.json();
+                this.saveToLocalStorage();
                 this.renderSceneList();
             }
         } catch (error) {
             console.log('初回読み込み:', error);
+        }
+    }
+
+    saveToLocalStorage() {
+        try {
+            localStorage.setItem('gamebook_story', JSON.stringify(this.storyData));
+            console.log('LocalStorageに保存しました');
+        } catch (error) {
+            console.error('LocalStorageへの保存エラー:', error);
         }
     }
 
@@ -81,6 +105,7 @@ class StoryEditor {
         reader.onload = (event) => {
             try {
                 this.storyData = JSON.parse(event.target.result);
+                this.saveToLocalStorage();
                 this.renderSceneList();
                 alert('JSONファイルを読み込みました');
             } catch (error) {
@@ -294,6 +319,9 @@ class StoryEditor {
         this.currentSceneId = newSceneId;
         this.originalSceneId = newSceneId;
 
+        // LocalStorageに保存
+        this.saveToLocalStorage();
+
         // 一覧を更新
         this.renderSceneList();
 
@@ -313,6 +341,7 @@ class StoryEditor {
             text: '新しいシーンのテキストを入力してください'
         };
 
+        this.saveToLocalStorage();
         this.selectScene(newId);
     }
 
@@ -323,6 +352,9 @@ class StoryEditor {
             delete this.storyData[this.currentSceneId];
             this.currentSceneId = null;
             this.originalSceneId = null;
+
+            // LocalStorageに保存
+            this.saveToLocalStorage();
 
             // 一覧を更新
             this.renderSceneList();

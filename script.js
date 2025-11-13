@@ -182,6 +182,20 @@ class GameBook {
 // ストーリーデータを読み込んでゲーム開始
 async function loadStoryAndStart() {
     try {
+        // まずLocalStorageから読み込みを試みる
+        const savedData = localStorage.getItem('gamebook_story');
+        if (savedData) {
+            try {
+                const storyData = JSON.parse(savedData);
+                new GameBook(storyData);
+                console.log('LocalStorageからストーリーを読み込みました');
+                return;
+            } catch (error) {
+                console.error('LocalStorageの読み込みエラー:', error);
+            }
+        }
+
+        // LocalStorageにない場合はstory.jsonから読み込み
         const response = await fetch('story.json');
         if (!response.ok) {
             throw new Error('ストーリーファイルの読み込みに失敗しました');
