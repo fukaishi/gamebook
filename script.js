@@ -21,10 +21,30 @@ class GameBook {
 
         // タッチ/クリックイベント（スマホ対応）
         const storyContainer = document.getElementById('story-container');
-        storyContainer.addEventListener('click', () => this.handleTap());
+
+        // タッチデバイスとそれ以外で処理を分ける
+        let touchStarted = false;
+
+        storyContainer.addEventListener('touchstart', (e) => {
+            touchStarted = true;
+            console.log('Touch started on story container');
+        }, { passive: true });
+
         storyContainer.addEventListener('touchend', (e) => {
-            e.preventDefault();
-            this.handleTap();
+            console.log('Touch ended on story container. touchStarted:', touchStarted);
+            if (touchStarted) {
+                e.preventDefault();
+                this.handleTap();
+                touchStarted = false;
+            }
+        });
+
+        storyContainer.addEventListener('click', (e) => {
+            console.log('Click on story container. touchStarted:', touchStarted);
+            // タッチイベントで既に処理された場合はスキップ
+            if (!touchStarted) {
+                this.handleTap();
+            }
         });
 
         // 最初のシーンを表示
@@ -41,6 +61,7 @@ class GameBook {
     }
 
     handleTap() {
+        console.log('Tap detected. canAdvance:', this.canAdvance);
         if (this.canAdvance) {
             this.nextScene();
         }
@@ -152,7 +173,21 @@ class GameBook {
             const button = document.createElement('button');
             button.className = 'choice-button';
             button.textContent = choice.text;
-            button.onclick = () => this.selectChoice(choice.next);
+
+            // タッチとクリックの両方に対応
+            const handleSelect = (e) => {
+                e.stopPropagation(); // story-containerへの伝播を防ぐ
+                console.log('Choice selected (click):', choice.text);
+                this.selectChoice(choice.next);
+            };
+
+            button.addEventListener('click', handleSelect);
+            button.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('Choice selected (touch):', choice.text);
+                this.selectChoice(choice.next);
+            });
 
             // キーボードショートカット（1, 2, 3...）
             document.addEventListener('keydown', (e) => {
