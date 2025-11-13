@@ -43,6 +43,7 @@ gamebook/
 ├── index.html      # メインHTML
 ├── style.css       # スタイルシート
 ├── script.js       # ゲームロジック
+├── story.json      # ストーリーデータ
 └── README.md       # このファイル
 ```
 
@@ -50,23 +51,36 @@ gamebook/
 
 ### ストーリーの追加・変更
 
-`script.js` の `storyData` オブジェクトを編集することで、ストーリーを変更できます。
+`story.json` ファイルを編集することで、ストーリーを変更できます。
+ストーリーデータは外部JSONファイルで管理されているため、プログラムコードを触らずに内容を変更できます。
 
-```javascript
-const storyData = {
-    scene_id: {
-        text: '表示するテキスト',
-        next: '次のシーンID',  // または
-        choices: [            // 選択肢
-            { text: '選択肢1', next: 'next_scene_1' },
-            { text: '選択肢2', next: 'next_scene_2' }
-        ],
-        effects: [            // 文字エフェクト（オプション）
-            { start: 0, end: 10, type: 'large' }  // large, small, shake, emphasis
-        ]
-    }
-};
+#### JSONフォーマット
+
+```json
+{
+  "scene_id": {
+    "text": "表示するテキスト",
+    "next": "次のシーンID",
+    "choices": [
+      { "text": "選択肢1", "next": "next_scene_1" },
+      { "text": "選択肢2", "next": "next_scene_2" }
+    ],
+    "effects": [
+      { "start": 0, "end": 10, "type": "large" }
+    ]
+  }
+}
 ```
+
+#### プロパティ説明
+
+- **text**: 表示するテキスト（`\n`で改行）
+- **next**: 次のシーンID（選択肢がない場合）
+- **choices**: 選択肢の配列（nextと排他的）
+- **effects**: 文字エフェクトの配列（オプション）
+  - **start**: エフェクト開始位置（文字数）
+  - **end**: エフェクト終了位置（文字数）
+  - **type**: エフェクトタイプ（`large`, `small`, `shake`, `emphasis`）
 
 ### テキスト表示速度の変更
 
