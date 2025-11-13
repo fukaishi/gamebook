@@ -19,6 +19,14 @@ class GameBook {
         // キーボードイベント
         document.addEventListener('keydown', (e) => this.handleKeyPress(e));
 
+        // タッチ/クリックイベント（スマホ対応）
+        const storyContainer = document.getElementById('story-container');
+        storyContainer.addEventListener('click', () => this.handleTap());
+        storyContainer.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            this.handleTap();
+        });
+
         // 最初のシーンを表示
         this.showScene(this.currentScene);
     }
@@ -29,6 +37,12 @@ class GameBook {
             if (this.canAdvance) {
                 this.nextScene();
             }
+        }
+    }
+
+    handleTap() {
+        if (this.canAdvance) {
+            this.nextScene();
         }
     }
 
